@@ -1,0 +1,11 @@
+<div style="float: left">
+    <h4 style="display: inline">
+        {{ author.smurf.full_name }}
+    </h4><br><i style="display: inline">({{ author }})</i>
+</div>
+<img style="float: right" src="{{ author.smurf.profile_image.url }}" width="30em" height="30em"/>
+
+
+<p style="clear: both; margin-top: 3.4em"><i>"{{ author.smurf.short_description }}"</i></p>
+
+<p>#Post: <a href="{% url 'home' author.pk author.username %}">{{ author.smurf.num_post }}</a></p>

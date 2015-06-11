@@ -1,0 +1,16 @@
+<div class="entry_tags">
+
+<p> Tags:
+        {% for tag in tags %}
+
+            {% if forloop.last %}
+                <a href="{% url 'home' tag.slug %}">{{ tag.name }} </a>
+            {% else %}
+                <a href="{% url 'home' tag.slug %}">{{ tag.name }}, </a>
+            {% endif %}
+
+
+        {% endfor %}
+</p>
+
+</div>

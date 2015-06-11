@@ -1,0 +1,129 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+
+    {% block meta %}
+        <meta charset="UTF-8">
+    {% endblock %}
+    <title>{% block title %} Itsmurfs Tech Blog {% endblock %}</title>
+
+
+    {% block style %}
+        {# This block will contain both style "inline" and links to stylesheet #}
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{% static 'techblog/css/base.css' %}"/>
+    {% endblock %}
+
+</head>
+<body>
+
+<!-- Bootstrap navigation bar -->
+<div class="blog-masthead">
+    <div class="container">
+        <nav class="blog-nav">
+            <a href="http://itsmurfs.it"><img src="{% static 'itsmurfs_techblog/images/itsmurfs_logos.png' %}" width="115em"/></a>
+            <a class="blog-nav-item" href="{% url 'home' %}">Blog</a>
+            <a class="blog-nav-item" href="{% url 'authors' %}">Authors</a>
+            <a class="blog-nav-item" href="{% url 'about' %}">About</a>
+        </nav>
+    </div>
+</div>
+<!--------------- end nav bar --------------------------->
+
+<!----------------- Bootstrap content ------------------------------->
+
+<div id="id_container" class="container"> {# this is needed for bootstrap layout #}
+
+
+    {% comment %}<div id="id_header">
+        {% block header %}
+
+            <div class="blog-header">
+
+            <img src="{% static 'itsmurfs_techblog/images/itsmurfs_logos.png' %}" width="400em" />
+
+            </div>
+
+
+        {% endblock %}
+
+    </div>{% endcomment %}
+
+
+    {% comment  %} TODO place it inside bootstrap layout
+<div id="id_left_content">
+    {% block left_content %}
+    {% endblock %}
+</div>
+{% endcomment %}
+
+    <div class="row">
+
+        <div id="id_content" class="col-sm-8 blog-main"> {# bootstrap class #}
+
+                {% block content %}
+
+                    THIS IS THE CONTENT
+
+                {% endblock %}
+
+        </div>
+
+
+        <div id="id_right_content" class="col-sm-3 col-sm-offset-1 blog-sidebar"> <!--Bootstrap sidebar -->
+
+            {% block right_content %}
+
+                <div id="about_box_id" class="sidebar-module sidebar-module-inset">
+                {% block about %}
+                    {% endblock %}
+                </div>
+
+            {% endblock %}
+        </div>
+
+    </div>
+
+    <div id="id_bottom_content">
+
+        {% block bottom_content %}
+        {% endblock %}
+    </div>
+
+</div>
+
+
+<div id="id_footer" class="blog-footer">
+
+    {% block footer %}
+        <p>Powered by <a href="http://itsmurfs.it">itsmurfs.it</a></p>
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    {% endblock %}
+
+</div>
+
+    {% block script %}
+
+
+
+<!-- Bootstrap core JavaScript amd Jquery
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+{% comment %}
+    TODO Download and install
+<script src="../../assets/js/docs.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+{% endcomment %}
+
+<script src="{% static 'techblog/js/techblog.styles.js' %}"></script>
+{% endblock %}
+</body>
+</html>

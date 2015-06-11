@@ -1,0 +1,258 @@
+{% extends "techblog/base/base.html" %}
+{% load staticfiles %}
+
+{{% block  meta %}
+
+                    <!--
+    ************************************************************************
+    *
+    *                       HTTP META
+    *
+    ************************************************************************ -->
+
+    <meta charset="UTF-8">
+    <meta name="description" content="{{ entry.meta_description }}">
+    <meta name="keywords" content="{{ entry.tags.names|join:', ' }}, {{ entry.seo_keywords|join:', ' }}">
+    <meta name="author" content="{% for author in entry.authors %} {{ author.first_name }} {{ author.last_name }}, {% endfor %}">
+
+                <!--
+    ************************************************************************
+    *
+    *                       FACEBOOK META
+    *
+    ************************************************************************ -->
+    <meta property="og:title" content="{{ entry.title }}" />
+    <meta property="og:site_name" content="itsmurfs"/>
+    <meta property="og:url" content="{{ request.build_absolute_uri}}" />
+    <meta property="og:description" content="{{ entry.meta_description }}"/>
+    <meta property="og:type" content="article" />
+    <meta property="og:locale" content="en_US" />            <!-- Default -->
+    <meta property="fb:app_id" content="{{ FB_APP_ID }}" />
+    {% comment %} TODO Add facebook information in the smurfs profile
+    <meta property="article:author" content="https://www.facebook.com/fareedzakaria" />
+    {% endcomment %}
+    <meta property="og:image" content="{{ front_images.facebook }}" />
+
+    <!--
+    ************************************************************************
+    *
+    *                       TWITTER META
+    *
+    ************************************************************************ -->
+
+    <meta name="twitter:card" content="summary_large_image">
+{#<meta name="twitter:site" content="@nytimes">#}
+<meta name="twitter:creator" content="@itsmurfs_"> {# TODO move inside a model #}
+<meta name="twitter:title" content="{{ entry.title }}">
+<meta name="twitter:description" content="{{ entry.meta_description }}">
+<meta name="twitter:image:src" content="{{ front_images.facebook }}"> {# TODO change in twitter #}
+
+{% endblock %}
+
+{% block script %}
+
+    {{ block.super }}
+
+
+{% endblock %}
+
+{{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'techblog/css/pygments_highlight.css' %}">
+    <link rel="stylesheet" href="{% static 'techblog/css/entry_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'techblog/css/tag_cloud.css' %}">
+{% endblock %}
+
+
+{% block title %}
+
+    {{ entry.title }} {# TODO add blog name #}
+
+{% endblock %}
+
+{{% block content %}
+
+    <div class="blog-post">
+
+        <h1 id="id_title" class="blog-post-title">
+            {{ entry.title }}
+        </h1>
+
+        <p class="blog-post-meta">{{ entry.creation_date }} by <a href="{% url 'authors' %}">{{ entry.authors|join:" ," }}</a></p>
+
+        <p id="id_meta_description" class="lead entry-description">
+            "{{ entry.meta_description }}"
+        </p>
+
+        <hr>
+
+    <div class="entry-content">
+        {% autoescape off %}
+            <!--
+    ************************************************************************
+    *
+    *                       CONTENT
+    *
+    ************************************************************************ -->
+
+            {{ entry.content }}
+        {% endautoescape %}
+    </div>
+
+        <hr>
+
+        <!--
+    ************************************************************************
+    *
+    *                       References
+    *
+    ************************************************************************ -->
+        {% if entry.has_references %}
+            <div id="references_id">
+                <h4> References </h4>
+                <ul>
+                    {% for ref in entry.references %}
+
+                        {% if ref.link %}
+
+                            <li><a href="{{ ref.link }}">{{ ref.title }}</a>
+                                {% if ref.description %} - <i>{{ ref.description }}</i> {% endif %}
+                            </li>
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+            </div>
+        {% endif %}
+
+    <hr>
+
+    {% block entry_tags %}
+        {% comment %}This block is overriden in the draft entry detail renderization
+        since a drafted entry doesn't have tags object{% endcomment %}
+    <!--
+    ************************************************************************
+    *
+    *                       Tags
+    *
+    ************************************************************************ -->
+
+    {% include "techblog/include/entry_tags_block.html" with tags=entry.tags_list%}
+
+    {% endblock %}
+
+
+    </div>
+
+{% endblock %}
+
+{% block right_content %}
+
+    {{ block.super }}
+
+    {% if entry.git_link %}
+    <!--
+    ************************************************************************
+*
+*                       Git Url
+*
+************************************************************************ -->
+
+    {% include "techblog/include/git_repo_block.html" with git_link=entry.git_link%}
+{% endif %}
+
+        {% if entry.demo_attachment %}
+    <!--
+    ************************************************************************
+*
+*                       Demo Attachment
+*
+************************************************************************ -->
+{% include "techblog/include/download_block.html" with demo_attachment=entry.demo_attachment%}
+
+{% endif %}
+
+    <!--
+************************************************************************
+*
+*                       Latest post
+*
+************************************************************************ -->
+
+{% include "techblog/include/entry_list_block.html" with Title="Latest Posts" entries=latest_entries%}
+
+
+    <!--
+************************************************************************
+*
+*                       Related post
+*
+************************************************************************ -->
+
+{% include "techblog/include/entry_list_block.html" with Title="Related Posts" entries=entry.similar_entries|slice:":3"%}
+    <!--
+************************************************************************
+*
+*                       Tag Cloud
+*
+************************************************************************ -->
+{% include "techblog/include/tag_cloud_block.html" with tag_cloud=tag_cloud%}
+
+
+{% endblock %}
+
+{% block about %}
+
+    <!--
+    ************************************************************************
+    *
+    *                           Author block
+    *
+    ************************************************************************ -->
+
+{%  for author in entry.authors %}
+{% include "techblog/include/author_block.html" with author=author %}
+
+    <hr>
+    {% endfor %}
+
+{% endblock %}
+
+{% block bottom_content %}
+
+
+    <hr>
+
+
+    <!--
+    ************************************************************************
+    *
+    *                       DISQUS
+    *
+    ************************************************************************ -->
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'itsmurfs-techblog'; // required: replace example with your forum shortname
+        var disqus_identifier = '{{ entry.id }}'; // a unique identifier for each page where Disqus is present
+        var disqus_title = '{{ entry.title }}'; //a unique title for each page where Disqus is present
+        var disqus_url = '{{ request.build_absolute_uri}}'; //a unique URL for each page where Disqus is present
+
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function () {
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by
+        Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+{% endblock %}

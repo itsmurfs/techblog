@@ -1,0 +1,216 @@
+{% extends "admin/change_form.html" %}
+{% load staticfiles %}
+{% load i18n admin_static admin_modify %}
+{% load admin_urls %}
+
+{% block extrahead %}{{ block.super }}
+
+    <!-- Place inside the <head> of your HTML -->
+    <script type="text/javascript" src="{% static "tinymce4_dev/tinymce.js" %}"></script>
+
+
+    <!-- if you want to replace this line you have to insert the plugin inside the tinymce4/plugins directory-->
+    <script type="text/javascript" src="{% static "tinymce4_dev/my_tinymce/plugins/snippet/plugin.js" %}"></script>
+
+
+
+    <!-- Needed for tag-it -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/jquery-ui.min.js"></script>
+    <script src="{% static 'tag-it/js/tag-it.min.js' %}" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css"
+          href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/themes/flick/jquery-ui.css">
+    <link href="{% static 'tag-it/css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
+
+    <!--
+    **************************************************************************
+    *
+    *                       TINYMCE
+    *
+    *************************************************************************
+    -->
+
+    <script type="text/javascript">
+
+        {#TODO Improve    #}
+        tinymce.init({
+            selector: "#id_content",
+            plugins: [
+                "advlist autolink lists link image charmap preview hr anchor pagebreak",
+                "searchreplace wordcount visualblocks visualchars code fullscreen",
+                "insertdatetime media nonbreaking save table contextmenu directionality",
+                "emoticons template paste textcolor colorpicker textpattern example",
+                "snippet"
+            ],
+            toolbar1: "snippet undo redo | styleselect | fontselect | fontsizeselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | preview media | forecolor backcolor emoticons",
+            image_advtab: true,
+            templates: [
+                {title: 'Test template 1', content: 'Test 1'},
+                {title: 'Test template 2', content: 'Test 2'}
+            ],
+            height: 700,
+            content_css: [
+                "{% static "tinymce4_dev/my_tinymce/plugins/snippet/snippet.css" %}",
+                "{% static "tinymce4_dev/my_tinymce/css/my_tinymce.css" %}",
+                <!-- Pygments css import -->
+                "{% static 'techblog/css/pygments_highlight.css' %}"
+
+
+            ],
+            browser_spellcheck: true,
+            setup: function (ed) {
+                ed.on("keyUp", function () {
+                    counts = parseInt($(".mce-wordcount").text().replace("Words:", ""));
+                    $('#id_wordcount').val(counts);
+                });
+            }
+
+        });
+    </script>
+    <!--fix for Chrome and Firefox allignemet with tinymce-->
+    <style>
+        .field-content label:first-child {
+            float: none;
+        !important;
+        }
+
+
+    </style>
+
+    <!--fix for django admin hidden input-->
+    <style>
+        .field-wordcount{
+            display: none;
+        }
+
+
+    </style>
+
+    <!--
+    **************************************************************************
+    *
+    *                       TAG-IT
+    *
+    *************************************************************************
+    -->
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#id_tags").tagit({
+                availableTags: {% autoescape off %}
+                    {{ adminform.form.fields.tags.available_tags}} {% endautoescape %},
+
+                autocomplete: {
+                    search: function (event, ui) {
+
+
+                        if (event.keyCode === 229) {
+                            //fix for chrome under unix. it fire the search also when you press left or up arrow to scroll the
+                            // tags menu.
+                            // it can lead to some strange behavior
+                            //see: http://stackoverflow.com/questions/25043934/is-it-ok-to-ignore-keydown-events-with-keycode-229
+                            //see also: https://github.com/ivaynberg/select2/issues/2482
+                            event.preventDefault();
+                        }
+
+                    }
+                }
+            });
+            $('#id_seo_keywords').tagit();
+        });
+    </script>
+
+        <style>
+        form ul.tagit {
+            padding-left: 10px;
+        }
+
+    </style>
+
+{% comment %}
+TODO Hard using normal system. Need to design a complete new drafted system
+            <!--
+    **************************************************************************
+    *
+    *                       Automatic save entry as draft
+    *
+    *************************************************************************
+    -->
+
+    <script>
+
+        function SaveDraft(){
+            //Save the draft
+            ajax_input = $('<input type="hidden" name="ajax" value="ajax"/>');
+            $('form').append(ajax_input);
+            $('form').submit(function(e){
+
+                if ($('form input[name=ajax]').length>0) {
+                    e.preventDefault();
+                    $('form input[name=ajax]').remove();
+                    tinyMCE.editors[0].save();
+                }
+            });
+
+            $('form').submit();
+
+            var submitted_data = $( 'form' ).serialize();
+            submitted_data = submitted_data+"&_continue=true";
+
+            console.log(submitted_data);
+            $.post( "{{ form_url }}", submitted_data, function( data ) {
+                    $( ".result" ).html( data );
+            });
+
+        }
+
+        $(document).ready(function () {
+            setTimeout(SaveDraft, 10000)
+        });
+
+
+    </script>{% endcomment %}
+
+        <!--
+    **************************************************************************
+    *
+    *                       ON SUBMIT
+    *
+    *************************************************************************
+    -->
+
+    <script>
+
+        $(document).ready(function () {
+            $('form').submit(function(e){
+                counts = parseInt($(".mce-wordcount").text().replace("Words:", ""));
+                $('#id_wordcount').val(counts);
+            });
+        });
+
+    </script>
+
+
+
+
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" href="{% static 'techblog/admin/css/admin_change_form.css' %}"/>
+{% endblock %}
+
+
+{% block object-tools-items %}
+    <li><a href="{% url opts|admin_urlname:'history' original.pk|admin_urlquote %}" class="historylink">{% trans "History" %}</a></li>
+    {% if has_absolute_url %}
+{#        Since django-contenttypes can't load model with pk of type string we have to take the absolute url directly from the model#}
+        <li><a target="_blank" href="{{ original.get_absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif%}
+
+    {% endblock %}
+
+
+{% block content %}
+    {{ block.super }}
+
+{% endblock %}
+

@@ -1,0 +1,10 @@
+<div id="tag_cloud_id" class="sidebar-module tags">    <!--Bootstrap sidebar -->
+        <h4>Tag cloud</h4>
+        <ul>
+            {% for tag in tag_cloud %}
+                <li><a href="{% url 'home' tag.slug %}"
+                       title="{{ tag.num_items }} post with this tag"
+                       class="tag{{ tag.size_class }}"> {{ tag.name }} </a></li>
+            {% endfor %}
+        </ul>
+    </div>

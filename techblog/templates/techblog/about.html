@@ -1,0 +1,73 @@
+{% extends 'techblog/base/base.html' %}
+{% load staticfiles %}
+
+{% block style %}
+
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'techblog/css/about.css' %}"
+{% endblock %}
+
+{% block content %}
+
+    <div id="about_id" style="font-size: 1.4em; text-align: justify">
+        <p>
+            Itsmurfs - a visionary team with the purpose to integrate brand new fresh technologies (both Open and closed
+            source), to
+            the toppest level of the enterprise.</p>
+
+        <p><strong>Fast Growing environments + Scalability + Elasticity = Python + Linux + Cloud technologies,</strong>
+            is the equation that better fit
+            with our interests and prospective.</p>
+
+        <p>Bring the happiest vision of Information Technology, with the same happiness of the smurfs,
+            moving through a jungle of fake IT wizards and <i>"tie boys - we do Java"</i>. </p>
+
+        <p><strong> Few words to decribe us, a lot of work to explain us.
+            <BR>Wanna know more? We too!</strong></p>
+        <BR>
+
+        <p>
+            <i>Stay tuned ! </i>
+
+            the itsmurfs Staff.
+        </p>
+    </div>
+    <div id="technologies_id" style="margin-top: 4em">
+
+        <p style="font-style: italic; text-decoration: underline ">
+
+            Some of the technologies used in this blog:
+
+        </p>
+
+
+        <a href="http://www.python.org/" target="_blank"> <img src="http://www.python.it/images/python-logo.gif"/> </a>
+        <a href="http://www.djangoproject.com/" target="_blank"> <img
+                src="https://www.djangoproject.com/s/img/site/hdr_logo.b19c5e60269d.gif"
+                style="margin-bottom: 10px; margin-right: 10px"/> </a>
+        <a href="http://www.mongodb.org/" target="_blank"> <img src="http://media.mongodb.org/logo-mongodb-header.png"
+                                                                 width="200px" height="57px"
+                                                                 style="background-color: #402817"/> </a>
+        <a href="http://www.postgresql.org/" target="_blank"> <img src="http://www.postgresql.org/media/img/layout/hdr_left.png"/> </a>
+
+    <a href="http://www.celeryproject.org/" target="_blank"> <img src="http://www.celeryproject.org/static/img/logo.png"/> </a>
+<a href="http://nginx.org/" target="_blank"> <img src="http://nginx.org/nginx.gif"/> </a>
+
+
+    </div>
+{% endblock %}
+
+{% block about %}
+
+    <strong> Contacts: </strong>
+    <p>
+        If you wanna talk to us or if you wanna help us with the blog, mail us!
+    </p>
+    <p>
+    <a href="mailto:itsmurfs@itsmurfs.it">itsmurfs@itsmurfs.it</a>
+</p>
+    <p>
+        We are always looking for a passionate <i>designer</i>. As you can see the graphic of the blog is very poor :)
+    </p>
+
+{% endblock %}

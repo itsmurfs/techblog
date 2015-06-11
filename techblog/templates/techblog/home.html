@@ -1,0 +1,132 @@
+{% extends 'techblog/base/base.html' %}
+{% load staticfiles %}
+
+{{% block  meta %}
+
+    <!--
+************************************************************************
+*
+*                       HTTP META
+*
+************************************************************************ -->
+
+    <meta charset="UTF-8">
+    <meta name="description" content="The itsmurfs blog!">
+    <meta name="keywords" content="python django cloud mongodb nonrel postgres developer system">
+    <meta name="author"
+          content="{% for author in authors %} {{ author.first_name }} {{ author.last_name }}, {% endfor %}">
+
+    <!--
+************************************************************************
+*
+*                       FACEBOOK META
+*
+************************************************************************ -->
+    <meta property="og:title" content="itsmurfs blog's home"/>
+    <meta property="og:site_name" content="itsmurfs"/>
+    <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+    <meta property="og:description" content=""/>
+    <meta property="og:locale" content="en_US"/>            <!-- Default -->
+    <meta property="fb:app_id" content="{{ FB_APP_ID }}"/>
+    {% comment %} TODO Add facebook information in the smurfs profile
+    {% endcomment %}
+    <meta property="og:image" content="{% static 'itsmurfs_techblog/images/itsmurfs_logos.png' %}"/>
+
+    <!--
+    ************************************************************************
+    *
+    *                       TWITTER META
+    *
+    ************************************************************************ -->
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:creator" content="@itsmurfs_"> {# TODO move inside a model #}
+    <meta name="twitter:title" content="itsmurfs blog's home">
+    <meta name="twitter:description" content="The itsmurfs blog!">
+    <meta name="twitter:image:src" content="{% static 'itsmurfs_techblog/images/itsmurfs_logos.png' %}">
+
+{% endblock %}
+
+{{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'techblog/css/tag_cloud.css' %}">
+{% endblock %}
+
+
+{% block about %}
+
+    <h4><strong>Authors</strong></h4>
+    {% for author in authors %}
+        {% include "techblog/include/author_block.html" with author=author %}
+
+        <hr>
+    {% endfor %}
+
+{% endblock %}
+
+{% block right_content %}
+
+    {{ block.super }}
+
+    <!--
+************************************************************************
+*
+*                       Tag Cloud
+*
+************************************************************************ -->
+    {% include "techblog/include/tag_cloud_block.html" with tag_cloud=tag_cloud %}
+{% endblock %}
+
+
+{% block content %}
+
+    {% if paginated_entries.object_list %}
+        {% for entry in paginated_entries.object_list %}
+
+            <h2 class="blog-post-title">
+                {{ entry.title }}
+            </h2>
+            {# TODO Subtitle???? #}
+
+            <p class="blog-post-meta">{{ entry.creation_date }} by <a href="#">{{ entry.authors|join:", " }}</a></p>
+
+            <p id="id_meta_description" class="lead entry-description">
+                "{{ entry.meta_description }}"
+            </p>
+
+
+            <a href="{% url 'entry_detail' entry.id entry.slug %}"> continue reading --></a>
+
+            <hr>
+
+        {% endfor %}
+    {% else %}
+
+        <h3><i>No posts yet :(</i></h3>
+    {% endif %}
+
+{% endblock %}
+
+{% block bottom_content %}
+
+    <ul class="pager"> <!-- Bootstrap pager -->
+
+        {# https://docs.djangoproject.com/en/dev/topics/pagination/ #}
+        {% if paginated_entries.has_previous %}
+            <li><a href="?page={{ paginated_entries.previous_page_number }}">Previous</a></li>
+        {% endif %}
+
+        <li>
+            <span>
+            Page {{ paginated_entries.number }} of {{ paginated_entries.paginator.num_pages }}.
+        </span>
+        </li>
+
+        {% if paginated_entries.has_next %}
+            <li><a href="?page={{ paginated_entries.next_page_number }}">Next</a></li>
+        {% endif %}
+
+    </ul>
+
+
+{% endblock %}

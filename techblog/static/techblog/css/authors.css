@@ -1,0 +1,54 @@
+
+.profile-sheet {
+    overflow: hidden;
+    background-color: #f9f9f9;
+    background: -moz-linear-gradient(top, #fff 5%, #f2f2f2 90%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #fff), color-stop(90%, #f2f2f2));
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#F2F2F2', GradientType=0);
+    border: 2px solid #d6d6d6;
+    -moz-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.08);
+    -webkit-box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.08);
+    padding: 16px 0 0 0;
+    position: relative;
+    margin-bottom: 2em;
+    float: left;
+    width: 49%;
+    margin-left: 0.4em;
+}
+
+#id_container{
+    width: 84%;
+    margin-left: 8em;
+}
+
+#id_content{
+    float: none;!important;
+    width: 100%; !important;
+}
+
+.smurfs_base_info p{
+    margin: 0;
+}
+
+.smurfs_base_info p span{
+    margin-left: 10px;
+}
+
+.profile-sheet div{
+    margin-left: 1em;
+
+}
+
+#id_right_content{
+    display: none;!important;
+}
+
+.full-name{
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.label-auth{
+    font-weight: bold;
+}

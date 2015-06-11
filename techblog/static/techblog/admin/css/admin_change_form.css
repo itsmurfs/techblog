@@ -1,0 +1,33 @@
+body {
+color: #2c3e50;
+font-family: 'Source Sans Pro', sans-serif;
+font-size: 16px;
+font-size: 1rem;
+line-height: 1.5;
+padding: 1em;
+}
+
+.code, pre {
+    font-size: 86.66667%;
+    word-wrap: normal;
+    padding-left: 30px;
+    }
+
+pre {
+    background: #eee;
+    font-family: "Courier 10 Pitch", Courier, monospace;
+    line-height: 1.6;
+    margin-bottom: 1em;
+    padding: 1em;
+    overflow: auto;
+    max-width: 100%;
+}
+
+.form-row.field-content{
+    float: left;
+    width: 60%;
+}
+
+.form-row{
+    overflow: auto;
+}

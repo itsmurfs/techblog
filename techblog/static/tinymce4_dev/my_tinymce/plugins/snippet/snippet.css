@@ -1,0 +1,11 @@
+pre {
+    font-size: 86.66667%;
+    word-wrap: normal;
+    background: #eee;
+    font-family: "Courier 10 Pitch", Courier, monospace;
+    line-height: 1.6;
+    margin-bottom: 1em;
+    padding: 1em;
+    overflow: auto;
+    max-width: 100%;
+}

@@ -1,0 +1,15 @@
+
+.entry-description {
+    font-size: 20px;
+    font-style: italic;
+    color: #999;
+}
+
+#references_id{
+    font-size: 14px;
+}
+
+.entry-content{
+    text-align: justify;
+    font-size: 1.3em;
+}

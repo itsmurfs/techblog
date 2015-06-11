@@ -1,0 +1,97 @@
+{% extends "techblog/base/base.html" %}
+{% load staticfiles %}
+
+{{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'techblog/css/authors.css' %}">
+{% endblock %}
+
+
+{{% block content %}
+
+    {% for author in authors %}
+
+        <div class="profile-sheet">
+            <div class="vcard">
+                <img src="{{ author.profile_image.url }}"
+                     class="photo"
+                     width="100" height="100"
+                     alt="{{ author.full_name }}"
+                     style="float: left;">
+
+                <div class="smurfs_base_info">
+                    <p><span class="full-name"> {{ author.full_name }} </span>
+                        {% if author.presentation_post %}
+                        <span class="presentation-post">(<a href="{{ author.presentation_post }}"> presentation post </a>)
+                        </span>
+                        {% endif %}
+                    </p>
+
+
+                    <p>
+                        <span class="work">"{{ author.job_title }}, {{ author.workplace }}"</span>
+                    </p>
+
+                    <p>
+                        <span class="label-auth">Location: </span>
+                        <span class="workarea"> {{ author.workarea }}</span></p>
+
+                    <p>
+                        <span class="label-auth">Industry: </span>
+                        <span class="field"> {{ author.field }}</span></p>
+
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="mentions">
+
+
+                <p>Tasks</p>
+
+                <ul>
+                    {% for mention in author.mentions.all %}
+
+                        <li><span class="mention_text"> {{ mention.description }} </span></li>
+
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+            <div class="references">
+
+
+                <p>Personal links</p>
+
+                <ul>
+                    {% for ref in author.references.all %}
+
+                        <li><a href="{{ ref.link }}"> {{ ref.link }} </a></li>
+
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+            <div class="contacts">
+
+
+                <p>Contact me: <a href="mailto:{{ author.user.email }}">{{ author.user.email }}</a></p>
+
+
+
+
+            </div>
+        </div>
+
+
+
+    {% endfor %}
+{% endblock %}}
+
+{% block right_content %}
+
+    {{ block.super }}
+{% endblock %}

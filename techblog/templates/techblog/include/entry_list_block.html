@@ -1,0 +1,9 @@
+    <div class="sidebar-module"> <!--Bootstrap sidebar -->
+        <h4>{{ Title }}</h4>
+        <ol class="list-unstyled">
+            {% for entry in entries %}
+                <li><a href="{% url 'entry_detail' entry.id entry.slug %}">{{ entry.title }}</a>
+                </li>
+            {% endfor %}
+        </ol>
+    </div>
